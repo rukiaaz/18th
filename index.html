@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 18th Birthday Jazwen | Bebbii</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --yellow-deep:   #f59e0b;
+            --yellow-mid:    #fbbf24;
+            --yellow-bright: #fcd34d;
+            --yellow-light:  #fde68a;
+            --yellow-pale:   #fef3c7;
+            --yellow-ghost:  #fffbeb;
+            --cream:         #fffdf5;
+            --brown:         #78350f;
+            --amber:         #92400e;
+            --white:         #ffffff;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--cream);
+            color: var(--brown);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ════════════════════════════════
+           PROGRESS BAR
+        ════════════════════════════════ */
+        .progress-bar {
+            position: fixed; top: 0; left: 0; height: 4px; width: 0;
+            background: linear-gradient(90deg, var(--yellow-deep), var(--yellow-bright), var(--yellow-deep));
+            z-index: 10000; box-shadow: 0 0 12px rgba(251,191,36,.8); transition: width .1s linear;
+        }
+
+        /* ════════════════════════════════
+           LOADER — cinema wipe exit
+        ════════════════════════════════ */
+        .loader {
+            position: fixed; inset: 0; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--yellow-pale) 0%, var(--yellow-light) 60%, var(--yellow-bright) 100%);
+        }
+        .loader::before {
+            content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,.5) 0%, transparent 70%);
+            animation: loaderOrb 4s ease-in-out infinite;
+        }
+        @keyframes loaderOrb { 0%,100%{transform:scale(1) translate(0,0)} 50%{transform:scale(1.2) translate(20px,-20px)} }
+
+        /* The two cinema panels that wipe up */
+        .loader-panel {
+            position: absolute; left: 0; width: 100%; height: 50%;
+            background: linear-gradient(135deg, var(--yellow-pale), var(--yellow-bright));
+            transition: transform 0.9s cubic-bezier(0.77,0,0.18,1);
+            z-index: 2;
+        }
+        .loader-panel.top    { top: 0;   transform-origin: top; }
+        .loader-panel.bottom { bottom: 0; transform-origin: bottom; }
+        .loader.wipe-out .loader-panel.top    { transform: translateY(-100%); }
+        .loader.wipe-out .loader-panel.bottom { transform: translateY(100%); }
+        .loader.gone { display: none; }
+
+        .loader-content { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; }
+        .loader-text {
+            font-family: 'Oswald', sans-serif; font-size: 3.5rem; font-weight: 700;
+            letter-spacing: .15em; text-transform: uppercase; color: var(--brown);
+            margin-bottom: .4rem; animation: fadeDown .8s ease forwards;
+        }
+        .loader-subtext {
+            font-family: 'Source Sans 3', sans-serif; font-size: 1rem; font-weight: 300;
+            letter-spacing: .4em; text-transform: uppercase; color: var(--amber);
+        }
+        .loader-hearts { font-size: 2.5rem; margin-top: 2rem; animation: pulse 1.5s ease-in-out infinite; }
+        .loader-ring {
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 3px solid rgba(120,53,15,.15); border-top-color: var(--yellow-deep);
+            animation: spin 1s linear infinite; margin-top: 2rem;
+        }
+        .loader-bar-wrap {
+            margin-top: 2.5rem; width: 220px; height: 3px;
+            background: rgba(120,53,15,.15); border-radius: 999px; overflow: hidden;
+        }
+        .loader-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--yellow-deep), var(--yellow-mid));
+            animation: loadFill 2.4s ease forwards;
+        }
+        @keyframes loadFill { from{width:0} to{width:100%} }
+
+        /* ════════════════════════════════
+           SECTION CURTAIN WIPE-IN
+        ════════════════════════════════ */
+        .wipe-section {
+            position: relative;
+            overflow: hidden;
+        }
+        .wipe-section .curtain {
+            position: absolute; inset: 0; z-index: 10; pointer-events: none;
+            background: var(--yellow-bright);
+            transform: translateX(0%);
+            transition: transform 0.9s cubic-bezier(0.77,0,0.18,1);
+        }
+        .wipe-section.wipe-revealed .curtain { transform: translateX(101%); }
+
+        /* ════════════════════════════════
+           TEXT LINE WIPE — heading reveal
+        ════════════════════════════════ */
+        .wipe-text-wrap {
+            display: inline-block; position: relative; overflow: hidden;
+        }
+        .wipe-text-wrap .wipe-bar {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--yellow-bright); transform-origin: left;
+            transform: scaleX(1);
+            transition: transform 0.7s cubic-bezier(0.77,0,0.18,1);
+            z-index: 1;
+        }
+        .wipe-text-wrap.done .wipe-bar { transform: scaleX(0); transform-origin: right; }
+        .wipe-text-wrap .wipe-inner { position: relative; z-index: 2; }
+
+        /* ════════════════════════════════
+           LETTER SPLIT ANIMATION
+        ════════════════════════════════ */
+        .letter-split { overflow: hidden; display: inline-block; }
+        .letter-split .char {
+            display: inline-block;
+            opacity: 0; transform: translateY(110%) rotate(8deg);
+            transition: opacity .5s ease, transform .5s ease;
+        }
+        .letter-split.revealed .char { opacity: 1; transform: none; }
+
+        /* ════════════════════════════════
+           LIQUID BLOB BACKGROUND
+        ════════════════════════════════ */
+        .blob-bg {
+            position: absolute; pointer-events: none; overflow: hidden;
+            inset: 0; z-index: 0;
+        }
+        .blob {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px); opacity: .18;
+            animation: blobFloat ease-in-out infinite;
+        }
+        @keyframes blobFloat {
+            0%,100% { transform: translate(0,0) scale(1); }
+            33%     { transform: translate(40px,-30px) scale(1.1); }
+            66%     { transform: translate(-20px,20px) scale(.95); }
+        }
+
+        /* ════════════════════════════════
+           ANIMATED WAVE DIVIDERS
+        ════════════════════════════════ */
+        .wave-divider {
+            display: block; width: 100%; overflow: hidden;
+            line-height: 0; position: relative; z-index: 1;
+        }
+        .wave-divider svg { display: block; width: 100%; }
+        .wave-divider svg path { animation: waveDrift 6s ease-in-out infinite; }
+        .wave-divider svg path:nth-child(2) { animation-delay: -2s; opacity: .5; }
+        @keyframes waveDrift {
+            0%,100% { d: path("M0,64 C200,128 400,0 600,64 C800,128 1000,0 1200,64 L1200,128 L0,128 Z"); }
+            50%     { d: path("M0,96 C200,0  400,128 600,96 C800,0  1000,128 1200,96 L1200,128 L0,128 Z"); }
+        }
+
+        /* ════════════════════════════════
+           MULTI-LAYER PARALLAX HERO
+        ════════════════════════════════ */
+        .hero-parallax-layer {
+            position: absolute; inset: 0; pointer-events: none;
+            will-change: transform;
+        }
+        .parallax-star {
+            position: absolute; border-radius: 50%;
+            background: rgba(255,255,255,.7);
+            animation: twinkle ease-in-out infinite;
+        }
+        @keyframes twinkle { 0%,100%{opacity:.3;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
+
+        /* ════════════════════════════════
+           RIPPLE ON CLICK
+        ════════════════════════════════ */
+        .ripple {
+            position: fixed; border-radius: 50%; pointer-events: none; z-index: 9000;
+            background: radial-gradient(circle, rgba(245,158,11,.5) 0%, rgba(245,158,11,0) 70%);
+            transform: translate(-50%,-50%) scale(0);
+            animation: rippleOut 0.8s ease-out forwards;
+        }
+        @keyframes rippleOut {
+            to { transform: translate(-50%,-50%) scale(1); opacity: 0; }
+        }
+
+        /* ════════════════════════════════
+           NAVIGATION
+        ════════════════════════════════ */
+        .nav {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 1.2rem 2rem; z-index: 500;
+            background: rgba(255,251,235,0);
+            backdrop-filter: blur(0px);
+            border-bottom: 1px solid transparent;
+            transition: background .4s, backdrop-filter .4s, border-color .4s, padding .3s;
+        }
+        .nav.scrolled {
+            background: rgba(255,251,235,.88);
+            backdrop-filter: blur(18px);
+            border-bottom-color: rgba(245,158,11,.2);
+            padding: .9rem 2rem;
+        }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
+        .nav-logo { font-family: 'Oswald', sans-serif; font-size: 1.4rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--brown); }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { font-family: 'Source Sans 3', sans-serif; font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); text-decoration: none; opacity: .8; transition: opacity .3s; }
+        .nav-links a:hover { opacity: 1; }
+        .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+        .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--brown); border-radius: 2px; transition: transform .3s, opacity .3s; }
+        .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+        .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .nav-mobile-menu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(255,251,235,.97); backdrop-filter: blur(20px); z-index: 490; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; opacity: 0; transform: translateY(-10px); transition: opacity .3s, transform .3s; }
+        .nav-mobile-menu.open { opacity: 1; transform: none; }
+        .nav-mobile-menu a { font-family: 'Oswald', sans-serif; font-size: 2rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--brown); text-decoration: none; transition: color .2s; }
+        .nav-mobile-menu a:hover { color: var(--yellow-deep); }
+        @media(max-width:640px) { .nav-links{display:none;} .nav-hamburger{display:flex;} .nav-mobile-menu{display:flex;} }
+
+        /* ════════════════════════════════
+           HERO
+        ════════════════════════════════ */
+        .hero {
+            min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative; padding: 6rem 2rem;
+            background: linear-gradient(160deg, var(--yellow-ghost) 0%, var(--yellow-pale) 20%, var(--yellow-light) 50%, var(--yellow-bright) 80%, var(--yellow-mid) 100%);
+            overflow: hidden;
+        }
+        .hero-sunburst {
+            position: absolute; inset: 0; pointer-events: none;
+            background: conic-gradient(from 0deg at 50% 50%,
+                rgba(255,255,255,.08) 0deg,rgba(255,255,255,0) 10deg,rgba(255,255,255,.06) 20deg,rgba(255,255,255,0) 30deg,
+                rgba(255,255,255,.08) 40deg,rgba(255,255,255,0) 50deg,rgba(255,255,255,.06) 60deg,rgba(255,255,255,0) 70deg,
+                rgba(255,255,255,.08) 80deg,rgba(255,255,255,0) 90deg,rgba(255,255,255,.06) 100deg,rgba(255,255,255,0) 110deg,
+                rgba(255,255,255,.08) 120deg,rgba(255,255,255,0) 130deg,rgba(255,255,255,.06) 140deg,rgba(255,255,255,0) 150deg,
+                rgba(255,255,255,.08) 160deg,rgba(255,255,255,0) 170deg,rgba(255,255,255,.06) 180deg,rgba(255,255,255,0) 190deg,
+                rgba(255,255,255,.08) 200deg,rgba(255,255,255,0) 210deg,rgba(255,255,255,.06) 220deg,rgba(255,255,255,0) 230deg,
+                rgba(255,255,255,.08) 240deg,rgba(255,255,255,0) 250deg,rgba(255,255,255,.06) 260deg,rgba(255,255,255,0) 270deg,
+                rgba(255,255,255,.08) 280deg,rgba(255,255,255,0) 290deg,rgba(255,255,255,.06) 300deg,rgba(255,255,255,0) 310deg,
+                rgba(255,255,255,.08) 320deg,rgba(255,255,255,0) 330deg,rgba(255,255,255,.06) 340deg,rgba(255,255,255,0) 350deg,rgba(255,255,255,.08) 360deg);
+        }
+        .hero::before {
+            content:''; position:absolute; width:700px; height:700px; border-radius:50%;
+            background:radial-gradient(circle,rgba(255,255,255,.35) 0%,transparent 70%);
+            top:-250px; left:-200px; animation:floatOrb 18s ease-in-out infinite; pointer-events:none;
+        }
+        .hero::after {
+            content:''; position:absolute; width:400px; height:400px; border-radius:50%;
+            background:radial-gradient(circle,rgba(255,255,255,.25) 0%,transparent 70%);
+            bottom:-100px; right:-100px; animation:floatOrb 24s ease-in-out infinite reverse; pointer-events:none;
+        }
+        @keyframes floatOrb { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-30px)} }
+        #heroCanvas { position:absolute; inset:0; pointer-events:none; z-index:1; }
+
+        /* spotlight */
+        .hero-spotlight {
+            position: absolute; inset: 0; pointer-events: none; z-index: 1;
+            background: radial-gradient(circle 280px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.18) 0%, transparent 80%);
+            transition: background .05s;
+        }
+
+        .hero-badge {
+            display: inline-block; background: rgba(255,255,255,.75); border: 2px solid rgba(245,158,11,.35); border-radius: 999px;
+            padding: .5rem 1.8rem; font-family: 'Source Sans 3', sans-serif; font-size: .72rem; font-weight: 700;
+            letter-spacing: .28em; text-transform: uppercase; color: var(--brown);
+            margin-bottom: 2rem; position: relative; z-index: 2; animation: fadeDown .9s .2s both;
+        }
+
+        /* COUNTER NUMBER — starts at 0 animates to 18 */
+        .hero-number {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(6rem, 22vw, 16rem); font-weight: 700; line-height: .85;
+            color: transparent; -webkit-text-stroke: 3px var(--brown);
+            position: relative; z-index: 2; letter-spacing: -.02em;
+            animation: titleReveal 1.2s .4s both;
+        }
+        @keyframes titleReveal { from{opacity:0;transform:translateY(60px) skewY(3deg)} to{opacity:1;transform:none} }
+
+        .hero-title {
+            font-family: 'Oswald', sans-serif; font-size: clamp(1.8rem,5vw,4rem); font-weight: 500;
+            letter-spacing: .2em; text-transform: uppercase; color: var(--brown);
+            margin-top: .8rem; text-align: center; position: relative; z-index: 2; animation: fadeDown .9s .6s both;
+        }
+        .hero-call-sign {
+            font-family: 'Source Sans 3', sans-serif; font-size: 1rem; font-weight: 300;
+            letter-spacing: .45em; color: var(--amber); margin-top: .6rem; text-transform: uppercase;
+            position: relative; z-index: 2; animation: fadeDown .9s .8s both;
+        }
+        .hero-subtitle {
+            font-family: 'Source Sans 3', sans-serif; font-size: clamp(.95rem,2vw,1.3rem); font-style: italic; font-weight: 300;
+            color: var(--amber); margin-top: 2rem; text-align: center; max-width: 560px; line-height: 1.9;
+            position: relative; z-index: 2; animation: fadeDown .9s 1s both;
+        }
+        .scroll-hint {
+            position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: .5rem;
+            font-family: 'Source Sans 3', sans-serif; font-size: .7rem; font-weight: 600;
+            letter-spacing: .2em; text-transform: uppercase; color: var(--amber); opacity: .7;
+            z-index: 2; animation: fadeDown .9s 1.5s both;
+        }
+        .scroll-arrow { width: 20px; height: 20px; border-right: 2px solid var(--amber); border-bottom: 2px solid var(--amber); transform: rotate(45deg); animation: scrollBounce 1.5s ease-in-out infinite; }
+        @keyframes scrollBounce { 0%,100%{transform:rotate(45deg) translate(0,0)} 50%{transform:rotate(45deg) translate(4px,4px)} }
+        .floating-hearts { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+        .float-heart { position: absolute; animation: floatHeart ease-in-out infinite; }
+        @keyframes floatHeart { 0%,100%{transform:translateY(0) rotate(0) scale(1);opacity:.6} 40%{transform:translateY(-28px) rotate(12deg) scale(1.1);opacity:.9} 70%{transform:translateY(-10px) rotate(-6deg) scale(.95);opacity:.7} }
+
+        /* ════════════════════════════════
+           MARQUEE
+        ════════════════════════════════ */
+        .marquee-wrap { background: var(--brown); overflow: hidden; padding: 1.1rem 0; }
+        .marquee-track { display: inline-flex; gap: 3rem; white-space: nowrap; animation: marquee 22s linear infinite; }
+        .marquee-track.reverse { animation: marqueeRev 26s linear infinite; }
+        .marquee-item { font-family: 'Oswald', sans-serif; font-size: 1.1rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--yellow-light); flex-shrink: 0; opacity: .9; }
+        .marquee-dot { color: var(--yellow-bright); flex-shrink: 0; }
+        @keyframes marquee    { to{transform:translateX(-50%)} }
+        @keyframes marqueeRev { to{transform:translateX(50%)} }
+
+        /* ════════════════════════════════
+           SHARED
+        ════════════════════════════════ */
+        .container { max-width: 1000px; margin: 0 auto; }
+        .section-label {
+            font-family: 'Source Sans 3', sans-serif; font-size: .72rem; font-weight: 700;
+            letter-spacing: .3em; text-transform: uppercase; color: var(--yellow-deep);
+            margin-bottom: 1rem; text-align: center;
+        }
+        .section-title {
+            font-family: 'Oswald', sans-serif; font-size: clamp(2rem,5vw,3.5rem); font-weight: 700;
+            letter-spacing: .08em; text-transform: uppercase; text-align: center; margin-bottom: 4rem;
+        }
+        [data-anim] { opacity:0; transition:opacity .85s ease,transform .85s ease; }
+        [data-anim="up"]    { transform:translateY(40px); }
+        [data-anim="left"]  { transform:translateX(-50px); }
+        [data-anim="right"] { transform:translateX(50px); }
+        [data-anim="scale"] { transform:scale(.8) rotate(-1deg); }
+        [data-anim].revealed { opacity:1; transform:none !important; }
+
+        /* ════════════════════════════════
+           INTRO
+        ════════════════════════════════ */
+        .intro { padding: 8rem 2rem; background: var(--yellow-ghost); position: relative; overflow: hidden; }
+        .intro::after {
+            content: '18'; position: absolute; right: -2rem; bottom: -5rem;
+            font-family: 'Oswald', sans-serif; font-size: 22rem; font-weight: 700;
+            color: transparent; -webkit-text-stroke: 2px rgba(120,53,15,.05);
+            pointer-events: none; animation: bgNum 10s ease-in-out infinite;
+        }
+        @keyframes bgNum { 0%,100%{transform:rotate(-4deg) scale(1)} 50%{transform:rotate(4deg) scale(1.04)} }
+        .intro-text { font-family: 'Oswald', sans-serif; font-size: clamp(1.5rem,3.5vw,2.8rem); font-weight: 400; letter-spacing: .04em; line-height: 1.55; color: var(--brown); text-align: center; }
+        .intro-mini { text-align: center; margin-top: 2rem; font-family: 'Source Sans 3', sans-serif; font-size: 1.1rem; font-weight: 300; font-style: italic; color: var(--amber); letter-spacing: .05em; }
+
+        /* ════════════════════════════════
+           TIMELINE
+        ════════════════════════════════ */
+        .memory-section { background: var(--yellow-pale); padding: 8rem 2rem; position: relative; overflow: hidden; }
+        .memory-section .section-title { color: var(--brown); }
+        .timeline { position: relative; max-width: 960px; margin: 0 auto; }
+        .timeline::before { content:''; position:absolute; left:50%; top:0; bottom:0; width:3px; background:linear-gradient(180deg,var(--yellow-bright),var(--yellow-deep),var(--brown)); transform:translateX(-50%); }
+        .tl-row { display:grid; grid-template-columns:1fr 56px 1fr; gap:0; margin-bottom:5rem; align-items:start; }
+        .tl-slot-a { display:flex; justify-content:flex-end; padding-right:2rem; }
+        .tl-slot-b { display:flex; justify-content:center; padding-top:.6rem; }
+        .tl-slot-c { display:flex; justify-content:flex-start; padding-left:2rem; }
+        .timeline-dot { width:22px; height:22px; flex-shrink:0; background:var(--yellow-deep); border:4px solid var(--white); border-radius:50%; box-shadow:0 0 0 3px var(--yellow-bright),0 4px 16px rgba(245,158,11,.4); z-index:1; }
+        .tl-photo { width:100%; max-width:340px; aspect-ratio:4/3; border-radius:20px; overflow:hidden; box-shadow:0 12px 40px rgba(120,53,15,.18); border:4px solid var(--white); background:var(--yellow-light); }
+        .tl-photo img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease; }
+        .tl-photo:hover img { transform:scale(1.06); }
+        .tl-photo-placeholder { width:100%; height:100%; min-height:200px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.8rem; background:linear-gradient(135deg,var(--yellow-light) 0%,var(--yellow-bright) 100%); }
+        .tl-photo-placeholder span { font-size:3.5rem; }
+        .tl-photo-placeholder p { font-family:'Source Sans 3',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--brown); opacity:.55; }
+        .tl-card { width:100%; max-width:340px; background:var(--white); padding:1.8rem 2rem; border-radius:20px; box-shadow:0 8px 32px rgba(120,53,15,.1); }
+        .tl-row:nth-child(odd)  .tl-card { border-left:4px solid var(--yellow-bright); }
+        .tl-row:nth-child(even) .tl-card { border-right:4px solid var(--yellow-bright); }
+        .tl-date { font-family:'Source Sans 3',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--yellow-deep); margin-bottom:.4rem; }
+        .tl-title { font-family:'Oswald',sans-serif; font-size:1.5rem; font-weight:600; letter-spacing:.04em; color:var(--brown); margin-bottom:.5rem; }
+        .tl-text { font-family:'Source Sans 3',sans-serif; font-size:.95rem; color:#5a4020; line-height:1.8; }
+        @media(max-width:700px) {
+            .timeline::before{left:22px;}
+            .tl-row{grid-template-columns:44px 1fr;grid-template-rows:auto auto;margin-bottom:3.5rem;}
+            .tl-slot-b{grid-column:1;grid-row:1;padding-top:.4rem;}
+            .tl-slot-a,.tl-slot-c{grid-column:2;padding:0;justify-content:flex-start;}
+            .tl-row:nth-child(even) .tl-slot-a{grid-row:2;}
+            .tl-row:nth-child(even) .tl-slot-c{grid-row:1;}
+            .tl-row:nth-child(odd)  .tl-slot-a{grid-row:1;}
+            .tl-row:nth-child(odd)  .tl-slot-c{grid-row:2;}
+            .tl-photo,.tl-card{max-width:100%;margin-bottom:1rem;}
+            .tl-card{border-left:4px solid var(--yellow-bright) !important;border-right:none !important;}
+        }
+
+        /* ════════════════════════════════
+           QUALITIES
+        ════════════════════════════════ */
+        .qualities-section {
+            background: linear-gradient(160deg, var(--yellow-light) 0%, var(--yellow-bright) 50%, var(--yellow-mid) 100%);
+            padding: 8rem 2rem; overflow: hidden; position: relative;
+        }
+        .qualities-section .section-title { color: var(--brown); }
+        .qualities-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; max-width:1100px; margin:0 auto; }
+        .quality-card { background:rgba(255,255,255,.92); padding:1.6rem 1.4rem; border-radius:16px; text-align:center; box-shadow:0 8px 28px rgba(120,53,15,.1); border-bottom:3px solid var(--yellow-bright); transition:transform .25s,box-shadow .25s; }
+        .quality-card:hover { transform:translateY(-6px) scale(1.02); box-shadow:0 16px 40px rgba(245,158,11,.25); }
+        .quality-icon { font-size:1.8rem; margin-bottom:.4rem; }
+        .quality-number { font-family:'Oswald',sans-serif; font-size:2.6rem; font-weight:700; color:var(--yellow-deep); opacity:.3; line-height:1; }
+        .quality-text { font-family:'Source Sans 3',sans-serif; font-size:.9rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--brown); margin-top:.4rem; }
+
+        /* ════════════════════════════════
+           MESSAGE
+        ════════════════════════════════ */
+        .message-section { background: var(--brown); padding: 8rem 2rem; position: relative; overflow: hidden; }
+        .message-content { max-width:780px; margin:0 auto; background:var(--yellow-ghost); padding:4rem; border-radius:28px; box-shadow:0 24px 60px rgba(0,0,0,.25); border:1px solid rgba(245,158,11,.2); position:relative; z-index:1; }
+        .message-label { font-family:'Source Sans 3',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.3em; text-transform:uppercase; color:var(--yellow-deep); margin-bottom:1.5rem; text-align:center; }
+        .message-greeting { font-family:'Oswald',sans-serif; font-size:2rem; font-weight:600; letter-spacing:.06em; color:var(--brown); margin-bottom:1.2rem; text-align:center; }
+        .message-text { font-family:'Source Sans 3',sans-serif; font-size:1.1rem; font-weight:400; line-height:2.1; color:#5a4020; text-align:center; }
+        .message-signature { text-align:right; margin-top:2.5rem; font-family:'Oswald',sans-serif; font-size:1.2rem; font-weight:500; letter-spacing:.1em; color:var(--yellow-deep); }
+
+        /* ════════════════════════════════
+           WISHES
+        ════════════════════════════════ */
+        .wishes-section { background: linear-gradient(180deg,var(--yellow-mid) 0%,var(--yellow-deep) 100%); padding:8rem 2rem; text-align:center; position:relative; overflow:hidden; }
+        .wishes-section .section-title { color:var(--white); }
+        .wish-text { font-family:'Source Sans 3',sans-serif; font-size:clamp(1.1rem,2.5vw,1.65rem); font-weight:300; font-style:italic; line-height:1.9; max-width:860px; margin:0 auto 2rem; color:rgba(255,255,255,.92); }
+        .wish-divider { color:rgba(255,255,255,.4); font-size:1.4rem; margin:1.5rem auto; display:block; }
+
+        /* ════════════════════════════════
+           FUTURE
+        ════════════════════════════════ */
+        .future-section { background: linear-gradient(180deg,var(--yellow-deep) 0%,var(--brown) 100%); padding:8rem 2rem; text-align:center; color:white; position:relative; overflow:hidden; }
+        .future-section .section-title { color:var(--yellow-light); }
+        .future-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; max-width:1000px; margin:0 auto; }
+        .future-item { font-family:'Oswald',sans-serif; font-size:clamp(1.8rem,3vw,2.8rem); font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:1.5rem; color:var(--yellow-light); cursor:default; transition:color .2s,transform .2s; }
+        .future-item:hover { color:var(--white); transform:scale(1.1); }
+
+        /* ════════════════════════════════
+           CLOSING
+        ════════════════════════════════ */
+        .closing-section { background:var(--brown); padding:10rem 2rem; text-align:center; color:white; position:relative; overflow:hidden; }
+        .closing-section::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center,rgba(253,230,138,.12) 0%,transparent 70%); }
+        .closing-eyebrow { font-family:'Source Sans 3',sans-serif; font-size:.78rem; font-weight:600; letter-spacing:.4em; text-transform:uppercase; color:var(--yellow-bright); opacity:.7; margin-bottom:1.5rem; position:relative; z-index:2; }
+        .closing-main { font-family:'Oswald',sans-serif; font-size:clamp(3rem,10vw,8rem); font-weight:700; letter-spacing:.04em; text-transform:uppercase; line-height:1; color:var(--yellow-light); position:relative; z-index:2; }
+        .closing-name { font-family:'Oswald',sans-serif; font-size:clamp(2rem,7vw,5rem); font-weight:300; letter-spacing:.3em; text-transform:uppercase; line-height:1.3; color:rgba(253,230,138,.7); position:relative; z-index:2; }
+        .closing-subtext { font-family:'Source Sans 3',sans-serif; font-size:1rem; font-weight:300; letter-spacing:.3em; text-transform:uppercase; margin-top:2rem; color:var(--yellow-light); opacity:.65; position:relative; z-index:2; }
+        .hearts-animation { font-size:3.5rem; margin-top:3rem; animation:heartbeat 2s ease-in-out infinite; position:relative; z-index:2; }
+        @keyframes heartbeat { 0%,100%{transform:scale(1)} 15%{transform:scale(1.3)} 30%{transform:scale(1)} 45%{transform:scale(1.15)} }
+
+        /* ════════════════════════════════
+           FOOTER
+        ════════════════════════════════ */
+        .footer { background:#2d1a00; padding:3.5rem 2rem; text-align:center; color:rgba(253,230,138,.7); display:flex; flex-direction:column; align-items:center; gap:1.2rem; }
+        .footer-text { font-family:'Source Sans 3',sans-serif; font-size:.95rem; font-weight:300; letter-spacing:.08em; }
+        .footer-call-sign { font-family:'Oswald',sans-serif; font-size:1.1rem; font-weight:600; letter-spacing:.3em; text-transform:uppercase; color:var(--yellow-bright); }
+        .footer-actions { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; }
+        .footer-btn { font-family:'Source Sans 3',sans-serif; font-size:.8rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:.6rem 1.4rem; border-radius:999px; border:2px solid rgba(253,230,138,.4); color:rgba(253,230,138,.8); background:transparent; cursor:pointer; transition:background .25s,color .25s,border-color .25s; }
+        .footer-btn:hover { background:var(--yellow-deep); color:var(--brown); border-color:var(--yellow-deep); }
+
+        /* ════════════════════════════════
+           SCROLL-TO-TOP + MUSIC
+        ════════════════════════════════ */
+        .scroll-top { position:fixed; bottom:2rem; right:2rem; width:48px; height:48px; border-radius:50%; background:var(--yellow-deep); color:var(--brown); border:none; cursor:pointer; font-size:1.3rem; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(245,158,11,.5); opacity:0; transform:translateY(20px); transition:opacity .3s,transform .3s; z-index:200; }
+        .scroll-top.visible { opacity:1; transform:none; }
+        .scroll-top:hover { background:var(--yellow-mid); transform:translateY(-3px); }
+        .music-btn { position:fixed; bottom:2rem; left:2rem; width:48px; height:48px; border-radius:50%; background:var(--brown); color:var(--yellow-light); border:none; cursor:pointer; font-size:1.2rem; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 20px rgba(120,53,15,.4); z-index:200; transition:transform .25s,background .25s; animation:fadeDown 1s 3s both; }
+        .music-btn:hover { background:var(--yellow-deep); color:var(--brown); transform:scale(1.1); }
+        .music-btn.playing { animation:musicPulse 1.5s ease-in-out infinite; }
+        @keyframes musicPulse { 0%,100%{box-shadow:0 4px 20px rgba(120,53,15,.4)} 50%{box-shadow:0 4px 30px rgba(245,158,11,.7),0 0 0 8px rgba(245,158,11,.15)} }
+
+        /* ════════════════════════════════
+           CONFETTI / TOAST
+        ════════════════════════════════ */
+        .confetti-piece { position:fixed; pointer-events:none; z-index:9998; animation:confettiFall linear forwards; }
+        @keyframes confettiFall { 0%{transform:translateY(0) rotate(0deg);opacity:1} 100%{transform:translateY(110vh) rotate(720deg);opacity:0} }
+        .toast { position:fixed; bottom:5.5rem; left:50%; transform:translateX(-50%) translateY(20px); background:var(--brown); color:var(--yellow-light); font-family:'Source Sans 3',sans-serif; font-size:.85rem; font-weight:600; letter-spacing:.08em; padding:.7rem 1.5rem; border-radius:999px; opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; z-index:400; }
+        .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+        /* ════════════════════════════════
+           GLOBAL KEYFRAMES
+        ════════════════════════════════ */
+        @keyframes fadeDown { from{opacity:0;transform:translateY(-30px)} to{opacity:1;transform:none} }
+        @keyframes pulse    { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+        @keyframes spin     { to{transform:rotate(360deg)} }
+
+        @media(max-width:640px) { .message-content{padding:2.5rem 1.5rem;} .hero-number{-webkit-text-stroke:2px var(--brown);} }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<button class="scroll-top" id="scrollTop" aria-label="Back to top">↑</button>
+<button class="music-btn"  id="musicBtn"  aria-label="Toggle music">♪</button>
+<div class="toast" id="toast"></div>
+
+<!-- ── LOADER ── -->
+<div class="loader" id="loader">
+    <div class="loader-panel top"></div>
+    <div class="loader-panel bottom"></div>
+    <div class="loader-content">
+        <div class="loader-text">For Jazwen</div>
+        <div class="loader-subtext">From Pransis</div>
+        <div class="loader-text">I LOVE YOU BEBI!!</div>
+        <div class="loader-ring"></div>
+        <div class="loader-bar-wrap"><div class="loader-bar-fill"></div></div>
+    </div>
+</div>
+
+<!-- ── NAV ── -->
+<nav class="nav" id="nav">
+    <div class="nav-inner">
+        <div class="nav-logo">Bebbii</div>
+        <div class="nav-links">
+            <a href="#intro">Her Story</a>
+            <a href="#memories">Memories</a>
+            <a href="#message">My Message</a>
+        </div>
+        <button class="nav-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+</nav>
+<div class="nav-mobile-menu" id="mobileMenu">
+    <a href="#intro"     class="mobile-link">Her Story</a>
+    <a href="#memories"  class="mobile-link">Memories</a>
+    <a href="#qualities" class="mobile-link">18 Things</a>
+    <a href="#message"   class="mobile-link">My Message</a>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+    <div class="hero-sunburst" id="heroSunburst"></div>
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-spotlight" id="heroSpotlight"></div>
+    <!-- parallax layer 1 — slow stars -->
+    <div class="hero-parallax-layer" id="pLayer1" data-speed="0.04"></div>
+    <!-- parallax layer 2 — fast sparkles -->
+    <div class="hero-parallax-layer" id="pLayer2" data-speed="0.09"></div>
+    <div class="floating-hearts" id="floatingHearts"></div>
+    <div class="hero-badge">✦ Happy 18th Birthday ✦</div>
+    <!-- number counter -->
+    <div class="hero-number" id="heroNumber">0</div>
+    <h1 class="hero-title">Jazwen Roslin</h1>
+    <div class="hero-call-sign">Bebbii</div>
+    <p class="hero-subtitle">For the girl who makes every moment brighter, every laugh louder, and every day worth remembering</p>
+    <div class="scroll-hint"><div class="scroll-arrow"></div>Scroll</div>
+</section>
+
+
+
+<!-- wave divider -->
+<div class="wave-divider" style="background:var(--brown);margin-bottom:-1px;">
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" style="height:80px;">
+        <path d="M0,64 C200,128 400,0 600,64 C800,128 1000,0 1200,64 L1200,80 L0,80 Z" fill="#fffbeb"/>
+        <path d="M0,64 C200,128 400,0 600,64 C800,128 1000,0 1200,64 L1200,80 L0,80 Z" fill="rgba(245,158,11,0.15)"/>
+    </svg>
+</div>
+
+<!-- ── INTRO ── -->
+<section class="intro wipe-section" id="intro">
+    <div class="curtain"></div>
+    <div class="blob-bg">
+        <div class="blob" style="width:400px;height:400px;background:var(--yellow-mid);top:-100px;left:-100px;animation-duration:18s;"></div>
+        <div class="blob" style="width:300px;height:300px;background:var(--yellow-bright);bottom:-50px;right:-50px;animation-duration:22s;animation-delay:-6s;"></div>
+    </div>
+    <div class="container" style="position:relative;z-index:1;">
+        <p class="section-label">A letter to you</p>
+        <h2 class="intro-text" data-anim="up">
+            This isn't just a birthday wish.<br>
+            <span class="wipe-text-wrap" id="wt1"><span class="wipe-bar"></span><span class="wipe-inner">It's a celebration of the incredible person you've become.</span></span>
+        </h2>
+        <p class="intro-mini" data-anim="up" style="transition-delay:.15s">From the moment you came into this world, you started writing a story worth telling...</p>
+    </div>
+</section>
+
+<!-- wave divider -->
+<div class="wave-divider" style="background:var(--yellow-ghost);margin-top:-1px;">
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" style="height:80px;">
+        <path d="M0,32 C300,80 600,0 900,48 C1050,64 1150,24 1200,32 L1200,80 L0,80 Z" fill="var(--yellow-pale)"/>
+    </svg>
+</div>
+
+<!-- ── TIMELINE ── -->
+<section class="memory-section wipe-section" id="memories">
+    <div class="curtain" style="background:var(--yellow-deep);"></div>
+    <div class="blob-bg">
+        <div class="blob" style="width:500px;height:500px;background:var(--yellow-bright);top:10%;right:-150px;animation-duration:20s;"></div>
+        <div class="blob" style="width:350px;height:350px;background:var(--yellow-mid);bottom:10%;left:-100px;animation-duration:16s;animation-delay:-8s;"></div>
+    </div>
+    <div class="container" style="position:relative;z-index:1;">
+        <p class="section-label">Looking back</p>
+        <h2 class="section-title letter-split" data-anim="up" id="tlTitle">The Journey of You</h2>
+    </div>
+    <div class="timeline" style="position:relative;z-index:1;">
+        <div class="tl-row" data-anim="up">
+            <div class="tl-slot-a"><div class="tl-photo"><img src="assets/love.jpg" alt="Photo 1"></div></div>
+            <div class="tl-slot-b"><div class="timeline-dot"></div></div>
+            <div class="tl-slot-c"><div class="tl-card"><div class="tl-date">The Beginning</div><div class="tl-title">1 YEAR AND 5 MONTHS</div><div class="tl-text">HAPPY 1 YEAR AND 5 MONTHS! BEBBIIII, YOU ARE THE MOST AMAZING PERSON I HAVE EVER MET JUDDDDD!!!</div></div></div>
+        </div>
+        <div class="tl-row" data-anim="up" style="transition-delay:.1s">
+            <div class="tl-slot-a"><div class="tl-card" style="border-left:none;border-right:4px solid var(--yellow-bright);"><div class="tl-date">Growing Up</div><div class="tl-title">The Early Years</div><div class="tl-text">From your first steps to your first words, from childhood dreams to teenage adventures — you've always been extraordinary.</div></div></div>
+            <div class="tl-slot-b"><div class="timeline-dot"></div></div>
+            <div class="tl-slot-c"><div class="tl-photo"><div class="tl-photo-placeholder"><span>🌻</span><p>Add a photo here</p></div></div></div>
+        </div>
+        <div class="tl-row" data-anim="up" style="transition-delay:.2s">
+            <div class="tl-slot-a"><div class="tl-photo"><div class="tl-photo-placeholder"><span>💛</span><p>Add a photo here</p></div></div></div>
+            <div class="tl-slot-b"><div class="timeline-dot"></div></div>
+            <div class="tl-slot-c"><div class="tl-card"><div class="tl-date">Becoming You</div><div class="tl-title">The Person You Are</div><div class="tl-text">Kind, funny, brilliant, and beautiful inside and out. You've grown into someone who makes everyone around you better.</div></div></div>
+        </div>
+        <div class="tl-row" data-anim="up" style="transition-delay:.3s">
+            <div class="tl-slot-a"><div class="tl-card" style="border-left:none;border-right:4px solid var(--yellow-bright);"><div class="tl-date">Today</div><div class="tl-title">Chapter 18</div><div class="tl-text">A new beginning. The world is yours to explore, dreams yours to chase, and happiness yours to claim.</div></div></div>
+            <div class="tl-slot-b"><div class="timeline-dot"></div></div>
+            <div class="tl-slot-c"><div class="tl-photo"><div class="tl-photo-placeholder"><span>🎂</span><p>Add a photo here</p></div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- wave divider -->
+<div class="wave-divider" style="background:var(--yellow-pale);margin-bottom:-1px;">
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" style="height:80px;">
+        <path d="M0,48 C150,0 350,80 600,40 C850,0 1050,80 1200,48 L1200,80 L0,80 Z" fill="var(--yellow-light)"/>
+    </svg>
+</div>
+
+
+
+<!-- wave divider -->
+<div class="wave-divider" style="background:var(--yellow-mid);margin-bottom:-1px;">
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" style="height:80px;">
+        <path d="M0,32 C400,80 800,0 1200,32 L1200,80 L0,80 Z" fill="var(--brown)"/>
+    </svg>
+</div>
+
+<!-- ── MESSAGE ── -->
+<section class="message-section wipe-section" id="message">
+    <div class="curtain" style="background:var(--amber);"></div>
+    <div class="blob-bg">
+        <div class="blob" style="width:450px;height:450px;background:rgba(253,230,138,.08);top:-100px;right:-100px;animation-duration:20s;filter:blur(60px);opacity:.3;"></div>
+        <div class="blob" style="width:300px;height:300px;background:rgba(245,158,11,.1);bottom:-50px;left:-50px;animation-duration:14s;animation-delay:-5s;filter:blur(60px);opacity:.3;"></div>
+    </div>
+    <div class="message-content" data-anim="scale">
+        <div class="message-label">A personal note</div>
+        <div class="message-greeting">Jazwen,</div>
+        <p class="message-text">
+            On your 18th birthday, I want you to know how incredibly special you are. These years we've shared have been filled with moments I'll treasure forever. You've been my sunshine on cloudy days, my laughter when I needed it most, and my reminder that the best things in life are the people we love.<br><br>
+            As you step into this new chapter, know that the world is infinitely better with you in it. Your 18 years have been just the beginning of the amazing story you're writing.<br><br>
+            Keep shining, keep dreaming, and never forget how loved you are.
+        </p>
+        <div class="message-signature">— Your Bebbii 💛</div>
+    </div>
+</section>
+
+<!-- wave divider -->
+<div class="wave-divider" style="background:var(--brown);margin-bottom:-1px;">
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" style="height:80px;">
+        <path d="M0,64 C300,0 600,80 900,32 C1050,8 1150,56 1200,64 L1200,80 L0,80 Z" fill="var(--yellow-mid)"/>
+    </svg>
+</div>
+
+<!-- ── WISHES ── -->
+<section class="wishes-section wipe-section">
+    <div class="curtain" style="background:var(--yellow-bright);"></div>
+    <div class="blob-bg">
+        <div class="blob" style="width:500px;height:500px;background:rgba(255,255,255,.1);top:-100px;left:20%;animation-duration:22s;filter:blur(80px);"></div>
+    </div>
+    <div class="container" style="position:relative;z-index:1;">
+        <p class="section-label" style="color:rgba(255,255,255,.6)">For you, always</p>
+        <h2 class="section-title letter-split" id="wishTitle" data-anim="up" style="color:white;margin-bottom:3rem">My Wishes For You</h2>
+        <div class="wish-text" data-anim="up">May your 18th year be filled with adventures that take your breath away</div>
+        <span class="wish-divider">✦</span>
+        <div class="wish-text" data-anim="up" style="transition-delay:.1s">May you find joy in the little things and strength in the challenges</div>
+        <span class="wish-divider">✦</span>
+        <div class="wish-text" data-anim="up" style="transition-delay:.2s">May every dream you dare to dream start coming true</div>
+        <span class="wish-divider">✦</span>
+        <div class="wish-text" data-anim="up" style="transition-delay:.3s">And may you always remember that you are enough, exactly as you are</div>
+    </div>
+</section>
+
+<!-- wave divider -->
+<div class="wave-divider" style="background:var(--yellow-mid);margin-bottom:-1px;">
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" style="height:80px;">
+        <path d="M0,48 C200,0 400,80 700,32 C900,0 1100,64 1200,48 L1200,80 L0,80 Z" fill="var(--yellow-deep)"/>
+    </svg>
+</div>
+
+<!-- ── FUTURE ── -->
+<section class="future-section wipe-section">
+    <div class="curtain" style="background:var(--brown);"></div>
+    <div class="blob-bg">
+        <div class="blob" style="width:400px;height:400px;background:rgba(253,230,138,.1);top:0;right:0;animation-duration:18s;filter:blur(70px);opacity:.4;"></div>
+    </div>
+    <div class="container" style="position:relative;z-index:1;">
+        <p class="section-label" style="color:var(--yellow-light)">What lies ahead</p>
+        <h2 class="section-title letter-split" id="futureTitle" data-anim="up" style="color:var(--yellow-light)">The Future Is Yours</h2>
+    </div>
+    <div class="future-grid" style="position:relative;z-index:1;">
+        <div class="future-item" data-anim="up" style="transition-delay:0s">Dream</div>
+        <div class="future-item" data-anim="up" style="transition-delay:.1s">Explore</div>
+        <div class="future-item" data-anim="up" style="transition-delay:.2s">Create</div>
+        <div class="future-item" data-anim="up" style="transition-delay:.3s">Love</div>
+        <div class="future-item" data-anim="up" style="transition-delay:.4s">Grow</div>
+        <div class="future-item" data-anim="up" style="transition-delay:.5s">Shine</div>
+        <div class="future-item" data-anim="up" style="transition-delay:.6s">Conquer</div>
+        <div class="future-item" data-anim="up" style="transition-delay:.7s">Thrive</div>
+    </div>
+</section>
+
+<!-- wave divider -->
+<div class="wave-divider" style="background:var(--yellow-deep);margin-bottom:-1px;">
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none" style="height:80px;">
+        <path d="M0,32 C150,64 350,0 600,48 C800,80 1050,16 1200,32 L1200,80 L0,80 Z" fill="var(--brown)"/>
+    </svg>
+</div>
+
+<!-- ── CLOSING ── -->
+<section class="closing-section">
+    <div class="closing-eyebrow">Always &amp; Forever</div>
+    <div class="closing-main"    data-anim="scale">Happy 18th</div>
+    <div class="closing-name"    data-anim="scale" style="transition-delay:.15s">Birthday, Jazwen</div>
+    <div class="closing-subtext" data-anim="up"    style="transition-delay:.3s">Forever and Always — Bebbii</div>
+    <div class="closing-main">I LOVE YOU SO MUCH</div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+    <div class="footer-text">Made with love for the most special girl</div>
+    <div class="footer-call-sign">Bebbii &amp; Jazwen</div>
+    <div class="footer-actions">
+        <button class="footer-btn" id="shareBtn">Share This Page ↗</button>
+        <button class="footer-btn" id="confettiBtn">Celebrate Again 🎉</button>
+    </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════
+   LOADER — cinema panel wipe exit
+══════════════════════════════════════════ */
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.classList.add('wipe-out');
+        setTimeout(() => {
+            loader.classList.add('gone');
+            launchConfetti(130);
+            setTimeout(() => launchConfetti(70), 2000);
+            startHeroCounter();
+        }, 950);
+    }, 2600);
+});
+
+/* ══════════════════════════════════════════
+   HERO COUNTER 0 → 18
+══════════════════════════════════════════ */
+function startHeroCounter() {
+    const el = document.getElementById('heroNumber');
+    let n = 0;
+    const end = 18;
+    const dur = 1800;
+    const step = dur / end;
+    function tick() {
+        n++;
+        el.textContent = n;
+        if (n < end) setTimeout(tick, step);
+    }
+    setTimeout(tick, 400);
+}
+
+/* ══════════════════════════════════════════
+   PROGRESS + NAV + SCROLL-TOP
+══════════════════════════════════════════ */
+const nav        = document.getElementById('nav');
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+const scrollTopBtn = document.getElementById('scrollTop');
+
+window.addEventListener('scroll', () => {
+    const s = document.documentElement.scrollTop;
+    const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    document.getElementById('progressBar').style.width = (s / h * 100) + '%';
+    nav.classList.toggle('scrolled', s > 60);
+    scrollTopBtn.classList.toggle('visible', s > 400);
+    // sunburst parallax
+    const sb = document.getElementById('heroSunburst');
+    if (sb) sb.style.transform = `rotate(${s * .015}deg)`;
+    // multi-layer parallax
+    document.querySelectorAll('.hero-parallax-layer').forEach(layer => {
+        const speed = parseFloat(layer.dataset.speed || 0.05);
+        layer.style.transform = `translateY(${s * speed}px)`;
+    });
+});
+
+hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+document.querySelectorAll('.mobile-link').forEach(a => {
+    a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        document.body.style.overflow = '';
+    });
+});
+scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+/* ══════════════════════════════════════════
+   SMOOTH SCROLL
+══════════════════════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) t.scrollIntoView({ behavior: 'smooth' });
+    });
+});
+
+/* ══════════════════════════════════════════
+   HERO SPOTLIGHT (mouse follow)
+══════════════════════════════════════════ */
+const hero = document.getElementById('hero');
+const spotlight = document.getElementById('heroSpotlight');
+hero.addEventListener('mousemove', e => {
+    const r = hero.getBoundingClientRect();
+    const px = ((e.clientX - r.left) / r.width  * 100).toFixed(1) + '%';
+    const py = ((e.clientY - r.top)  / r.height * 100).toFixed(1) + '%';
+    spotlight.style.background = `radial-gradient(circle 320px at ${px} ${py}, rgba(255,255,255,.22) 0%, transparent 80%)`;
+});
+hero.addEventListener('mouseleave', () => {
+    spotlight.style.background = 'radial-gradient(circle 280px at 50% 50%, rgba(255,255,255,.1) 0%, transparent 80%)';
+});
+
+/* ══════════════════════════════════════════
+   PARALLAX STAR LAYERS
+══════════════════════════════════════════ */
+[document.getElementById('pLayer1'), document.getElementById('pLayer2')].forEach((layer, li) => {
+    for (let i = 0; i < (li === 0 ? 18 : 10); i++) {
+        const s = document.createElement('div');
+        s.classList.add('parallax-star');
+        const sz = Math.random() * (li === 0 ? 3 : 5) + 1;
+        s.style.cssText = `
+            left:${Math.random()*100}%; top:${Math.random()*100}%;
+            width:${sz}px; height:${sz}px;
+            animation-duration:${Math.random()*3+2}s;
+            animation-delay:${Math.random()*4}s;
+            opacity:${Math.random()*.5+.2};
+        `;
+        layer.appendChild(s);
+    }
+});
+
+/* ══════════════════════════════════════════
+   HERO PARTICLE CANVAS
+══════════════════════════════════════════ */
+const canvas = document.getElementById('heroCanvas');
+const ctx    = canvas.getContext('2d');
+const heroEl = document.getElementById('hero');
+function resizeCanvas() { canvas.width = heroEl.offsetWidth; canvas.height = heroEl.offsetHeight; }
+resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+const PCOLS = ['#f59e0b','#fbbf24','#fcd34d','#fde68a','#ffffff','#92400e'];
+function mkP() { return { x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*4+1, sx:(Math.random()-.5)*.7, sy:(Math.random()-.5)*.7, o:Math.random()*.5+.1, c:PCOLS[Math.floor(Math.random()*PCOLS.length)] }; }
+const particles = Array.from({length:70}, mkP);
+(function animP() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p => {
+        p.x+=p.sx; p.y+=p.sy;
+        if (p.x<0||p.x>canvas.width||p.y<0||p.y>canvas.height) Object.assign(p,mkP(),{x:Math.random()*canvas.width,y:Math.random()*canvas.height});
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=p.c; ctx.globalAlpha=p.o; ctx.fill(); ctx.globalAlpha=1;
+    });
+    requestAnimationFrame(animP);
+})();
+
+/* ══════════════════════════════════════════
+   FLOATING HEARTS
+══════════════════════════════════════════ */
+const heartEmojis = ['💛','✨','🌟','💫','🌻','⭐','🎀','🌼'];
+const heartContainer = document.getElementById('floatingHearts');
+for (let i = 0; i < 10; i++) {
+    const h = document.createElement('div'); h.classList.add('float-heart');
+    const size = (Math.random()*2+1.2).toFixed(1), dur=(Math.random()*4+3).toFixed(1), del=(Math.random()*5).toFixed(1);
+    h.style.cssText = `left:${Math.random()*90}%;top:${Math.random()*80+10}%;font-size:${size}rem;animation-duration:${dur}s;animation-delay:${del}s;`;
+    h.textContent = heartEmojis[i % heartEmojis.length];
+    heartContainer.appendChild(h);
+}
+
+/* ══════════════════════════════════════════
+   INTERSECTION OBSERVER — data-anim + section curtain wipes + letter splits + text wipes
+══════════════════════════════════════════ */
+
+// 1. data-anim reveals
+const ioAnim = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('revealed'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('[data-anim]').forEach(el => ioAnim.observe(el));
+
+// 2. Section curtain wipes — triggers when 10% of section visible
+const ioCurtain = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            e.target.classList.add('wipe-revealed');
+            ioCurtain.unobserve(e.target);
+        }
+    });
+}, { threshold: 0.1 });
+document.querySelectorAll('.wipe-section').forEach(s => ioCurtain.observe(s));
+
+// 3. Letter-split titles
+function splitLetters(el) {
+    const text = el.textContent;
+    el.innerHTML = '';
+    [...text].forEach((ch, i) => {
+        const span = document.createElement('span');
+        span.classList.add('char');
+        span.textContent = ch === ' ' ? '\u00A0' : ch;
+        span.style.transitionDelay = `${i * 0.04}s`;
+        el.appendChild(span);
+    });
+}
+document.querySelectorAll('.letter-split').forEach(el => splitLetters(el));
+const ioLetters = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('revealed'); ioLetters.unobserve(e.target); }
+    });
+}, { threshold: 0.3 });
+document.querySelectorAll('.letter-split').forEach(el => ioLetters.observe(el));
+
+// 4. Text wipe bars
+const ioTextWipe = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            setTimeout(() => e.target.classList.add('done'), 300);
+            ioTextWipe.unobserve(e.target);
+        }
+    });
+}, { threshold: 0.5 });
+document.querySelectorAll('.wipe-text-wrap').forEach(el => ioTextWipe.observe(el));
+
+/* ══════════════════════════════════════════
+   RIPPLE ON CLICK
+══════════════════════════════════════════ */
+document.addEventListener('click', e => {
+    const r = document.createElement('div');
+    r.classList.add('ripple');
+    const size = 200;
+    r.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;width:${size}px;height:${size}px;`;
+    document.body.appendChild(r);
+    setTimeout(() => r.remove(), 850);
+});
+
+/* ══════════════════════════════════════════
+   CONFETTI
+══════════════════════════════════════════ */
+function launchConfetti(n = 80) {
+    const cols = ['#f59e0b','#fbbf24','#fcd34d','#fde68a','#78350f','#fff9c4','#fffde7'];
+    for (let i = 0; i < n; i++) {
+        const el = document.createElement('div'); el.classList.add('confetti-piece');
+        const s = Math.random()*10+4;
+        el.style.cssText = `left:${Math.random()*100}vw;top:-20px;width:${s}px;height:${s}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${Math.random()*3+2}s;animation-delay:${Math.random()*1.5}s;`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 5500);
+    }
+}
+document.getElementById('confettiBtn').addEventListener('click', () => launchConfetti(100));
+
+/* ══════════════════════════════════════════
+   MUSIC (Web Audio API — Happy Birthday)
+══════════════════════════════════════════ */
+const musicBtn = document.getElementById('musicBtn');
+let audioCtx = null, isPlaying = false, noteIdx = 0, noteTimer = null;
+const MELODY = [
+    [261.6,.3],[261.6,.15],[293.7,.45],[261.6,.45],[349.2,.45],[329.6,.9],
+    [261.6,.3],[261.6,.15],[293.7,.45],[261.6,.45],[392.0,.45],[349.2,.9],
+    [261.6,.3],[261.6,.15],[523.3,.45],[440.0,.45],[349.2,.45],[329.6,.45],[293.7,.9],
+    [466.2,.3],[466.2,.15],[440.0,.45],[349.2,.45],[392.0,.45],[349.2,1.2]
+];
+function playNote(freq, dur) {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination); osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(.25, audioCtx.currentTime+.02);
+    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime+dur-.02);
+    osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime+dur);
+}
+function playMelody() {
+    if (!isPlaying) return;
+    if (noteIdx >= MELODY.length) noteIdx = 0;
+    const [freq, dur] = MELODY[noteIdx++];
+    playNote(freq, dur);
+    noteTimer = setTimeout(playMelody, dur*1000+30);
+}
+musicBtn.addEventListener('click', () => {
+    if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    isPlaying = !isPlaying;
+    musicBtn.classList.toggle('playing', isPlaying);
+    musicBtn.textContent = isPlaying ? '♫' : '♪';
+    if (isPlaying) { noteIdx = 0; playMelody(); }
+    else clearTimeout(noteTimer);
+});
+
+/* ══════════════════════════════════════════
+   SHARE
+══════════════════════════════════════════ */
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+}
+document.getElementById('shareBtn').addEventListener('click', () => {
+    const url = window.location.href;
+    if (navigator.share) navigator.share({ title: 'Happy 18th Birthday Jazwen!', url });
+    else if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => showToast('Link copied! 💛'));
+    else showToast('Copy the URL from your browser 💛');
+});
+</script>
+</body>
+</html>
